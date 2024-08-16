@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <link rel="stylesheet" href="{% static 'css/student_signup.css' %}">
+    <script>
+        function validateForm() {
+            const name = document.forms["signupForm"]["name"].value;
+            const address = document.forms["signupForm"]["address"].value;
+            const contact_no = document.forms["signupForm"]["contact_no"].value;
+            const email = document.forms["signupForm"]["email"].value;
+            const password = document.forms["signupForm"]["password"].value;
+            const confirm_password = document.forms["signupForm"]["confirm_password"].value;
+
+            // Validate that all fields are filled out
+            if (name === "" || address === "" || contact_no === "" || email === "" || password === "" || confirm_password === "") {
+                alert("All fields must be filled out");
+                return false;
+            }
+
+            // Validate contact number as a 10-digit number
+            if (!/^\d{10}$/.test(contact_no)) {
+                alert("Please enter a valid 10-digit contact number");
+                return false;
+            }
+
+            // Validate that passwords match
+            if (password !== confirm_password) {
+                alert("Passwords do not match");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body>
+
+<div class="signup-container">
+    <h2>Sign Up</h2>
+    <form name="signupForm" action="#" method="POST" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="College Name" required>
+        <input type="text" name="address" placeholder="College Address" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="number" name="contact_no" placeholder="contact No" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+        <button type="submit">Sign Up</button>
+        <div class="text-center p-t-70">
+            <p class="txt1" >
+                Already have an account?<a class="txt1" href="{% url 'colleges_login' %}"> Sign In</a>
+            </p>
+        </div>
+    </form>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+</body>
+</html>
