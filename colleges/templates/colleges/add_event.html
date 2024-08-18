@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event</title>
+    <link rel="stylesheet" href="{% static 'css/add_event.css' %}">
+</head>
+<body>
+    <h1>Add a New Event</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="event_name">Event Name:</label>
+            <input type="text" id="event_name" name="event_name" required>
+        </div>
+        <div>
+            <label for="event_date">Event Date:</label>
+            <input type="date" id="event_date" name="event_date" required>
+        </div>
+        <div>
+            <label for="event_end_date">Event End Date:</label>
+            <input type="date" id="event_end_date" name="event_end_date" required>
+        </div>
+        <div>
+            <label for="event_venue">Event Venue:</label>
+            <input type="text" id="event_venue" name="event_venue" required>
+        </div>
+        <div>
+            <label for="event_description">Event Description:</label>
+            <textarea id="event_description" name="event_description" rows="4" required></textarea>
+        </div>
+        <div>
+            <label for="event_logo">Event Logo:</label>
+            <input type="file" id="event_logo" name="event_logo">
+        </div>
+        <div>
+            <label for="event_status">Event Status:</label>
+            <select id="event_status" name="event_status" required>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+            </select>
+        </div>
+        <button type="submit">Add Event</button>
+        <a class="back-button" href="{% url 'colleges:college_homepage' %}">Home</a>
+    </form>
+</body>
+</html>
