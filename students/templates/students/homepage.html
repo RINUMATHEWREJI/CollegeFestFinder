@@ -14,28 +14,20 @@
         <div class="logo">College Fest Finder</div>
         <nav>
             <ul>
-                <li><a href="{% url 'homepage' %}">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="{% url 'students:homepage' %}">Home</a></li>
+                <li><a href="#how-it-works">About</a></li>
                 <li><a href="#events">Events</a></li>
                 <li><a href="#colleges">Colleges</a></li>
-                <li><a href="{% url 'login_selection' %}">Login</a></li>
-                <li><a href="#">Register</a></li>
+                <li><a href="{% url 'students:login_selection' %}">Login</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
+
         <h1>Discover, Register, and Participate in College Events Across the Colleges!</h1>
         <p>Your one-stop platform for all college fests and events.</p>
-        <div class="cta-buttons">
-            <a href="#" class="btn">Explore Events</a>
-            <a href="#" class="btn">Register Now</a>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search events or colleges...">
-            <button>Search</button>
-        </div>
     </section>
 
     <!-- Featured Events Section -->
@@ -75,7 +67,7 @@
     </section>
 
     <!-- How It Works Section -->
-    <section class="how-it-works">
+    <section id = "how-it-works" class="how-it-works">
         <h2>How It Works</h2>
         <div class="steps">
             <div class="step">
@@ -97,18 +89,6 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <h2>What Students Say</h2>
-        <div class="testimonial">
-            <p>"This platform made it so easy to find and register for events at different colleges!"</p>
-            <span>- Student A</span>
-        </div>
-        <div class="testimonial">
-            <p>"I loved how simple and user-friendly the site is. Highly recommend!"</p>
-            <span>- Student B</span>
-        </div>
-    </section>
 
     <!-- Newsletter Signup Section -->
     <section class="newsletter">

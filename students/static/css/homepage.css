@@ -38,10 +38,10 @@ header nav ul li {
 }
 
 .hero {
-    background-image: url('https://via.placeholder.com/1200x400');
+    background-image: url('/static/images/eventsheader1.jpg');
     background-size: cover;
     background-position: center;
-    color: #ffffff;
+    color: black;
     text-align: center;
     padding: 100px 20px;
 }
@@ -52,7 +52,7 @@ header nav ul li {
 }
 
 .hero p {
-    font-size: 18px;
+    font-size: 36px;
     margin-bottom: 30px;
 }
 

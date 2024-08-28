@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 20px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+.event_container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+}
+
+.eventbox {
+    display: flex;
+    flex-direction: column; /* Arrange items in a column */
+    align-items: center; /* Center items horizontally */
+    padding: 30px;
+    margin: 30px;
+    background-image: linear-gradient(to right, #4867e0 60%, #329fec);
+    border-radius: 10px;
+    max-width: 310px;
+    text-align: center; /* Center text inside eventbox */
+}
+
+.eventbox img {
+    border: 5px ridge #329fec;
+}
+
+.eventbox p {
+    margin-bottom: 10px; /* Adjust margin for spacing */
+}
+
+.eventbox .title {
+    font-size: 1.3em;
+}
+
+.eventbox .label {
+    font-weight: bold;
+}
+
+.delete_button {
+    background-color: red; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block;
+    font-size: 16px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    margin-top: 20px; /* Add space above the button */
+}
+
+.delete_button:hover {
+    background-color: darkred; 
+}

@@ -12,13 +12,13 @@
     <div id="main_content">        
         <p class="box_title">select user</p>
         <div id="login">
-            <a href="{% url 'student_login' %}">Student</a>
+            <a href="{% url 'students:student_login' %}">Student</a>
             <a href="{% url 'colleges:colleges_login' %}">College</a>
             <a href="{% url 'admin_login' %}">Admin</a>
         </div>
     </div>
     <div class="outbtn_container">
-        <a href="{% url 'homepage' %}" class="form_btn">Homepage</a>
+        <a href="{% url 'students:homepage' %}" class="form_btn">Homepage</a>
     </div>
 </body>
 </html>

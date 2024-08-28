@@ -14,9 +14,9 @@
     <nav>
         <ul>
             <li><a href="{% url 'colleges:add_event' %}">Add Event</a></li>
-            <li><a href="#">Delete Event</a></li>
-            <li><a href="#">Edit Event</a></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="{% url 'colleges:delete_event_page_without_id' %}">Delete Event</a></li>
+            <li><a href="{% url 'colleges:update_event_page' %}">Edit Event</a></li>
+            <li><a href="{% url 'colleges:colleges_logout' %}">Logout</a></li>
         </ul>
     </nav>
 </header>

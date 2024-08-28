@@ -74,16 +74,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'collegefestfinder.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
 
 DATABASES = {
      'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'collegefestfinder',  # Your PostgreSQL database name
-        'PASSWORD': 'password',       # Your PostgreSQL password
-        'HOST': 'localhost',               # The host where your database is running
-        'PORT': '5432',                    # The default port for PostgreSQL
+        'NAME': 'collegefestfinder',  
+        'PASSWORD': 'password',       
+        'HOST': 'localhost',               
+        'PORT': '5432',                    
         'USER': 'postgres',
     }
 }

@@ -1,0 +1,38 @@
+{% load static %}
+<html>
+    <head>
+        <title>Delete Event</title>
+        <link rel="stylesheet" href="{% static 'css/delete_event_page.css' %}">
+    </head>
+    <body>
+        <header>
+            <div class="logo">Delete Event</div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'colleges:college_homepage' %}">Homepage</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="event_container">
+            {% for event in events %}    
+                <div class="eventbox">
+                    <img src="{{ event.event_logo.url }}" height="300px" width="300px">
+                    <p class="title">{{event.event_name}}</p>
+                    <p><span class="label">Description:</span> {{event.event_description}}</p>
+                    <p><span class="label">End Date:</span> {{event.event_end_date}}</p>
+                    <p><span class="label">Status:</span> {{event.event_status}}</p>
+                    <form action="{% url 'colleges:delete_event' event.event_id %}" method="post" onsubmit="return confirmDeletion();"> 
+                        {% csrf_token %}
+                        <button type="submit" class="delete_button">Delete</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <script>
+            function confirmDeletion() {
+                return confirm("Are you sure you want to delete this event?");
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Fest Finder</title>
+    <link rel="stylesheet" href="{% static 'css/view_college_events.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">College Fest Finder</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'students:student_homepage' %}">Return To Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="first_heading">
+        <h1>Events</h1>
+    </div>
+    <div class="event_container">
+        {% for event in events %}    
+            <div class="eventbox">
+                <img src="{{ event.event_logo.url }}" height="300px" width="300px">
+                <p class="title">{{ event.event_name }}</p>
+                <p><span class="label">Description:</span> {{ event.event_description }}</p>
+                <p><span class="label">End Date:</span> {{ event.event_end_date }}</p>
+                <p><span class="label">Status:</span> {{ event.event_status }}</p>
+                {% if event.event_status == 'open' %}
+                    <form method="post" action="{% url 'students:register_for_event' event.event_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="register-button">Register</button>
+                    </form>
+                {% else %}
+                    <p class="closed">Registration Closed</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Hidden element to store messages -->
+    <div id="message-container" data-messages="{% if messages %}{% for message in messages %}{{ message|escapejs }}{% if not forloop.last %}|{% endif %}{% endfor %}{% endif %}"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the messages from the data attribute
+            var messageContainer = document.getElementById('message-container');
+            var messages = messageContainer.getAttribute('data-messages').split('|');
+
+            // Display each message
+            messages.forEach(function(msg) {
+                if (msg) {
+                    alert(msg);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
