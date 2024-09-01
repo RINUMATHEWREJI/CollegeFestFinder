@@ -1,1 +1,42 @@
-<h1>admin homepage</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin_homepage.css' %}">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">Admin Dashboard</div>
+        <ul>
+            <li><a href="{% url 'adminapp:add_admin' %}">Add Admin</a></li>
+            <li><a href="{% url 'students:homepage' %}">Add Student</a></li>
+            <li><a href="{% url 'students:homepage' %}">Edit Student</a></li>
+            <li><a href="{% url 'students:homepage' %}">Delete Student</a></li>
+            <li><a href="{% url 'students:homepage' %}">Add College</a></li>
+            <li><a href="{% url 'students:homepage' %}">Edit College</a></li>
+            <li><a href="{% url 'students:homepage' %}">Delete College</a></li>
+            <li><a href="{% url 'students:homepage' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <section id="colleges" class="colleges">
+        <h2>Select Colleges to view events</h2>
+        <div class="college-logos">
+        {% for college in colleges %}
+            <div class="college-logo">
+            <a href="{% url 'adminapp:edit_events_page' college.college_id %}">
+                Name: {{ college.name }}
+            </a>
+            <p>Address: {{ college.address }}</p>
+            <p>Contact No: {{ college.contactno }}</p>
+            <p>Email: {{ college.email }}</p>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+</body>
+</html>

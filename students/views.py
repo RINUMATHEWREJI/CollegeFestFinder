@@ -7,8 +7,11 @@ from colleges.models import Colleges,Event,EventRegistration
 # Create your views here.
 
 def homepage(request):
+    events = Event.objects.all()
 
-    return render(request,'students/homepage.html')
+    colleges = Colleges.objects.all()
+
+    return render(request,'students/homepage.html',{'events':events , 'colleges':colleges})
 
 def login_selection(request):
     return render(request,'students/login_selection.html')

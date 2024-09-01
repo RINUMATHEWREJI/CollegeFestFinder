@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Event</title>
+    <link rel="stylesheet" href="{% static 'css/edit_events.css' %}">
+</head>
+<body>
+    </header>
+    <div class="form_container">
+        <h1>Update Event: {{ event.event_name }}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+            <div>
+                <label for="event_name">Event Name:</label>
+                <input type="text" id="event_name" name="event_name" value="{{ event.event_name }}" required>
+            </div>
+            <div>
+                <label for="event_end_date">Event Date:</label>
+                <input type="date" id="event_date" name="event_date" value="{{ event.event_date }}" required>
+            </div>
+            <div>
+                <label for="event_end_date">Event End Date:</label>
+                <input type="date" id="event_end_date" name="event_end_date" value="{{ event.event_end_date }}" required>
+            </div>
+            <div>
+                <label for="event_venue">Venue:</label>
+                <input type="text" id="event_venue" name="event_venue" value="{{ event.event_venue }}" required>
+            </div>
+            <div>
+                <label for="event_description">Description:</label>
+                <textarea id="event_description" name="event_description"  rows="4" required>{{ event.event_description }}</textarea>
+            </div>
+            
+            <div>
+                <label for="event_logo">Event Logo:</label>
+                <input type="file" id="event_logo" name="event_logo">
+                {% if event.event_logo %}
+                    <img src="{{ event.event_logo.url }}" alt="Current Logo" height="100px" width="100px">
+                {% endif %}
+            </div>
+            <div>
+                <label for="event_status">Status:</label>
+                <select id="event_status" name="event_status" required>
+                    <option value="open" {% if event.event_status == 'open' %}selected{% endif %}>open</option>
+                    <option value="closed" {% if event.event_status == 'closed' %}selected{% endif %}>closed</option>
+                </select>
+            </div>
+            <button type="submit" class="submit_button">Update Event</button>
+            <a class="back-button" href="{% url 'adminapp:edit_events_page' college_id %}">Back to events page</a>
+        </form>
+    </div>
+</body>
+</html>

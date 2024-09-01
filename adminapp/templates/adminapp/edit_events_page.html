@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Fest Finder</title>
+    <link rel="stylesheet" href="{% static 'css/edit_events_page.css' %}">
+</head>
+<body>
+<header>
+    <div class="logo">Edit/Delete events</div>
+    <nav>
+    <ul>
+        <li>
+            <a href="{% url 'adminapp:admin_homepage' %}">admin homepage</a>
+        </li>
+    </ul>
+    </nav>
+</header>
+<div class="event_container">
+    {% for event in events %}
+        <div class="eventbox">
+            <img src="{{ event.event_logo.url }}" height="300px" width="300px">
+            <p class="title">{{ event.event_name }}</p>
+            <p><span class="label">Date: </span>{{event.event_date}}</p>
+            <p><span class="label">End Date: </span>{{event.event_end_date}}</p>
+            <p><span class="label">Venue: </span>{{event.event_venue}}</p>
+            <p><span class="label">Description: </span>{{event.event_description}}</p>
+            <p><span class="label">Status: </span>{{event.event_status}}</p>
+            <form method="post" action="{% url 'adminapp:edit_events' event.event_id %}" onsubmit="return confirmEdit();">
+                {% csrf_token %}
+                <button type="submit" class="edit_button">EDIT</button>
+            </form>
+            <form method="post" action="{% url 'adminapp:delete_events' event.event_id %}" onsubmit="return confirmDeletion();">
+                {% csrf_token %}
+                <button type="submit" class="delete_button">DELETE</button>
+            </form>
+        </div>
+    {% endfor %}
+
+</div>
+<script>
+    function confirmEdit(){
+        return confirm("are you sure want to edit this event? ");
+    }
+    function confirmDeletion(){
+        return confirm("are you sure want to delete this event?");
+    }
+</script>
+
+</body>
+</html>
