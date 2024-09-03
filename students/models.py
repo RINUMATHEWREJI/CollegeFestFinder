@@ -11,7 +11,7 @@ class Student(models.Model):
     contact_no = models.CharField(max_length=15)
     dateofbirth = models.DateField()
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)  # Adjusted length for hashed password
+    password = models.CharField(max_length=128)  
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

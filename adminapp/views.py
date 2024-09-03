@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from .models import Admin
-from colleges.models import Colleges,Event
+from colleges.models import Colleges,Event,Student
+from datetime import datetime
+
 # Create your views here.
 def add_admin(request):
     if request.method == 'POST':
@@ -21,6 +23,7 @@ def add_admin(request):
         messages.success(request, "Your account has been created successfully")
         return redirect('adminapp:admin_login')
     return render(request,'adminapp/add_admin.html')
+
 def admin_login(request):
 
     if request.method=='POST':
@@ -97,3 +100,82 @@ def delete_events(request,event_id):
         return redirect('adminapp:edit_events_page', college_id=college_id)
     else:
         return redirect('adminapp:admin_login')
+    
+def manage_students(request):
+
+    if 'admin_id' in request.session:
+        students = Student.objects.all()
+
+
+        return render(request,'adminapp/manage_students.html',{'students':students})
+    else:
+        return redirect('adminapp:admin_login')
+
+
+def add_student(request):
+    if 'admin_id' in request.session:
+        if request.method == 'POST':
+            name = request.POST['name']
+            age = request.POST['age']
+            collegename = request.POST['collegename']
+            branch = request.POST['branch']
+            year = request.POST['year']
+            contact_no = request.POST['contact_no']
+            dateofbirth = request.POST['dateofbirth']
+            email = request.POST['email']
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+
+            if password != confirm_password:
+                messages.error(request, "Passwords do not match")
+                return render(request, 'adminapp/add_student.html')
+        
+            student = Student(name=name,age=age,collegename=collegename,branch=branch,year=year,contact_no=contact_no,dateofbirth=dateofbirth,email=email,password=password)
+            student.set_password(password)
+            student.save()
+            messages.success(request, "Your account has been created successfully")
+            return redirect('adminapp:manage_students')
+        return render(request,'adminapp/add_student.html')
+    else:
+        return redirect('adminapp:admin_login')
+
+def edit_student(request, student_id):
+    if 'admin_id' in request.session:
+        student = get_object_or_404(Student, pk=student_id)
+        if request.method == "POST":
+            name = request.POST['name']
+            age = request.POST['age']
+            collegename = request.POST['collegename']
+            branch = request.POST['branch']
+            year = request.POST['year']
+            contact_no = request.POST['contact_no']
+            email = request.POST['email']
+
+
+            if name and age and collegename and branch and year and contact_no and email:
+                student.name = name
+                student.age = age
+                student.collegename = collegename
+                student.branch = branch
+                student.year = year
+                student.contact_no = contact_no
+                student.email = email
+
+                student.save()
+                messages.success(request, "Student has been updated successfully.")
+                return redirect('adminapp:manage_students')
+        
+        return render(request, 'adminapp/edit_student.html', {'student': student})
+    else:
+        return redirect('adminapp:admin_login')
+    
+
+def delete_student(request,student_id):
+    if 'admin_id' in request.session:
+        student = get_object_or_404(Student,student_id=student_id)
+        student.delete()
+        messages.success(request, "Student has been deleted successfully.")
+        return redirect('adminapp:manage_students')
+    else:
+        return redirect('adminapp:admin_login')
+

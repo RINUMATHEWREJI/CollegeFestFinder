@@ -13,12 +13,8 @@
         <div class="logo">Admin Dashboard</div>
         <ul>
             <li><a href="{% url 'adminapp:add_admin' %}">Add Admin</a></li>
-            <li><a href="{% url 'students:homepage' %}">Add Student</a></li>
-            <li><a href="{% url 'students:homepage' %}">Edit Student</a></li>
-            <li><a href="{% url 'students:homepage' %}">Delete Student</a></li>
-            <li><a href="{% url 'students:homepage' %}">Add College</a></li>
-            <li><a href="{% url 'students:homepage' %}">Edit College</a></li>
-            <li><a href="{% url 'students:homepage' %}">Delete College</a></li>
+            <li><a href="{% url 'adminapp:manage_students' %}">Manage Students</a></li>
+            <li><a href="{% url 'students:homepage' %}">Manage College</a></li>
             <li><a href="{% url 'students:homepage' %}">Logout</a></li>
         </ul>
     </nav>
@@ -37,6 +33,7 @@
             </div>
         {% endfor %}
         </div>
+    </section>
     </section>
 </body>
 </html>
