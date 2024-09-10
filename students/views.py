@@ -4,6 +4,8 @@ from .models import Student
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
 from colleges.models import Colleges,Event,EventRegistration
+from colleges.models import Feedback
+from django.urls import reverse
 # Create your views here.
 
 def homepage(request):
@@ -57,7 +59,7 @@ def student_signup(request):
         student.set_password(password)
         student.save()
         messages.success(request, "Your account has been created successfully")
-        return redirect(student_login)
+        return redirect('students:student_login')
 
     return render(request,'students/student_signup.html')
 
@@ -78,6 +80,31 @@ def student_homepage(request):
     else:
         return redirect('students:student_login')
     
+def add_feedback(request,event_id):
+    if 'student_id' in request.session:
+        event = get_object_or_404(Event,event_id=event_id)
+        if request.method == 'POST':
+            feedback_text = request.POST.get('feedback_text')
+            rating = request.POST.get('rating')
+
+            student_id = request.session.get('student_id')
+            student = get_object_or_404(Student,student_id=student_id)
+
+            if feedback_text and rating is not None:
+                feedback = Feedback(student=student,event=event,feedback_text=feedback_text,rating=rating)
+                feedback.save()
+
+                messages.success(request,"feedback submitted succesfully")
+                url = reverse('students:student_homepage') + '#registered_events'
+                return redirect(url)
+            else:
+                messages.error(request,"all fields ae required")
+            
+
+        return render(request,'students/student_homepage.html')
+    else:
+        return redirect('students:student_login')
+
 
 def view_college_events(request, college_id):
     college = get_object_or_404(Colleges, college_id=college_id)

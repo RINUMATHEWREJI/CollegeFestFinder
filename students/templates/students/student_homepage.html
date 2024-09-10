@@ -38,7 +38,7 @@
         </div>
     </section>
 
-    
+
 
     <!-- Colleges Section -->
     <section id="colleges" class="colleges">
@@ -71,8 +71,48 @@
                 <p><span class="label">End Date:</span> {{ event.event_end_date }}</p>
                 <p><span class="label">Status:</span> {{ event.event_status }}</p>
 
+                <div class="feedback_section">
+                    
+                    <form method="POST" id="feedbackForm" action="{% url 'students:add_feedback' event.event_id %}">
+                        {% csrf_token %}
+                        <textarea name="feedback_text" rows="4" placeholder="Write your feedback here..."></textarea>
+                        <label for="rating">Rating:</label>
+                        <input type="number" name="rating" min="1" max="5" placeholder="1 to 5">
+                        <input type="hidden" name="event_id" value="{{ event.event_id }}">
+                        <button type="submit">Add Feedback</button>
+                    </form>
+                </div>
+                <script>
+                    document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+                        var ratingInput = document.getElementById('rating');
+                        var rating = parseInt(ratingInput.value, 10);
+                
+                        if (isNaN(rating) || rating < 1 || rating > 5) {
+                            event.preventDefault(); // Prevent form submission
+                            alert('Please enter a rating between 1 and 5.');
+                            ratingInput.focus(); // Focus the rating input field
+                        }
+                    });
+                </script>
+
             </div>
         {% endfor %}
     </div>
+    <div id="message-container" data-messages="{% if messages %}{% for message in messages %}{{ message|escapejs }}{% if not forloop.last %}|{% endif %}{% endfor %}{% endif %}"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get the messages from the data attribute
+            var messageContainer = document.getElementById('message-container');
+            var messages = messageContainer.getAttribute('data-messages').split('|');
+
+            // Display each message
+            messages.forEach(function(msg) {
+                if (msg) {
+                    alert(msg);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

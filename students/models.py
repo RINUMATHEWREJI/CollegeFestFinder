@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password,check_password
+from colleges.models import Event
+from django.apps import apps
 
 class Student(models.Model):
     student_id = models.AutoField(primary_key=True)

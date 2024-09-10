@@ -46,7 +46,7 @@ def colleges_signup(request):
     return render(request, 'colleges/colleges_signup.html')
 
 def college_homepage(request):
-    # Ensure that only authenticated colleges can access this page
+    
     if 'college_id'  in request.session:
         college_id = request.session['college_id']
         college = Colleges.objects.get(college_id=college_id)
@@ -58,7 +58,7 @@ def college_homepage(request):
         return redirect('colleges:colleges_login')
     
 def add_event(request):
-    # Check if the user is logged in by checking the session
+   
     if 'college_id' not in request.session:
         return redirect('colleges:colleges_login')
 
@@ -74,7 +74,7 @@ def add_event(request):
         event_date = parse_datetime(event_date_str)
         event_end_date = parse_datetime(event_end_date_str)
 
-        # Retrieve the college object from the session
+        
         college = Colleges.objects.get(pk=request.session['college_id'])
 
         event = Event(
@@ -154,7 +154,7 @@ def update_event(request, event_id):
 
                 event.save()
                 messages.success(request, "Event has been updated successfully.")
-                return redirect('colleges:update_event_page')  # Redirect to update_event_page
+                return redirect('colleges:update_event_page')  
 
         return render(request, 'colleges/update_event.html', {'event': event})
 

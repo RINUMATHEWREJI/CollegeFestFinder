@@ -19,21 +19,21 @@
             const password = document.forms["signupForm"]["password"].value;
             const confirm_password = document.forms["signupForm"]["confirm_password"].value;
 
-            // Validate that all fields are filled out
+            
             if (name === "" || contact_no === "" || email === "" || password === "" || confirm_password === "") {
                 alert("All fields must be filled out");
                 return false;
             }
 
 
-            // Validate contact number as a 10-digit number
+            
             if (!/^\d{10}$/.test(contact_no)) {
                 alert("Please enter a valid 10-digit contact number");
                 return false;
             }
 
 
-            // Validate that passwords match
+            
             if (password !== confirm_password) {
                 alert("Passwords do not match");
                 return false;

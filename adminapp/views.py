@@ -1,8 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
-from .models import Admin
-from colleges.models import Colleges,Event,Student
+from django.apps import apps
 from datetime import datetime
+
+Admin = apps.get_model('adminapp', 'Admin')
+Colleges = apps.get_model('colleges', 'Colleges')
+Event = apps.get_model('colleges', 'Event')
+Student = apps.get_model('students', 'Student')
 
 # Create your views here.
 def add_admin(request):
@@ -75,8 +79,9 @@ def edit_events(request,event_id):
 
             if event_name and event_date and event_end_date and event_venue and event_description and event_status:
                 event.event_name = event_name
-                event.event_date = event_date  # Should be in 'YYYY-MM-DD' format
-                event.event_end_date = event_end_date  # Should be in 'YYYY-MM-DD' format
+                event.event_date = event_date  
+                event.event_end_date = event_end_date  
+                
                 event.event_venue = event_venue
                 event.event_description = event_description
                 event.event_status = event_status
