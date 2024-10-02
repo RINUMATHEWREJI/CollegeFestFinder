@@ -232,3 +232,53 @@ header nav ul li {
     display: flex;
     flex-direction: column;
 }
+
+
+.event_container{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+}
+
+.eventbox{
+    padding: 30px 30px;
+    margin: 30px;
+    background-image: linear-gradient(to right, #4867e0 60%, #329fec);
+    border-radius: 10px;
+    max-width: 310px;
+}
+
+.eventbox img{
+    border: 5px ridge #329fec;
+}
+
+.eventbox p{
+    margin-bottom: 0px;
+}
+
+.eventbox .title{
+    font-size: 1.3em;
+}
+
+.eventbox .label{
+    font-weight: bold;
+}
+.register-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    margin-left: 100px;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+}

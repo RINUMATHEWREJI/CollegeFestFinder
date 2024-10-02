@@ -7,6 +7,7 @@ Admin = apps.get_model('adminapp', 'Admin')
 Colleges = apps.get_model('colleges', 'Colleges')
 Event = apps.get_model('colleges', 'Event')
 Student = apps.get_model('students', 'Student')
+Feedback = apps.get_model('colleges', 'Feedback')
 
 # Create your views here.
 def add_admin(request):
@@ -60,7 +61,7 @@ def admin_homepage(request):
 def edit_events_page(request,college_id):
     if 'admin_id' in request.session:
         college = get_object_or_404(Colleges,college_id=college_id)
-        events = Event.objects.filter(college = college)
+        events = Event.objects.filter(college = college).prefetch_related('feedbacks')
         return render(request,'adminapp/edit_events_page.html',{'events': events})
     else:
         return redirect('adminapp:admin_login')
@@ -184,3 +185,75 @@ def delete_student(request,student_id):
     else:
         return redirect('adminapp:admin_login')
 
+def manage_colleges(request):
+
+    if 'admin_id' in request.session:
+        colleges = Colleges.objects.all()
+
+
+        return render(request,'adminapp/manage_colleges.html',{'colleges':colleges})
+    else:
+        return redirect('adminapp:admin_login')
+    
+def add_colleges(request):
+    if 'admin_id' in request.session:
+        if request.method == 'POST':
+            name = request.POST['name']
+            address = request.POST['address']
+            contactno = request.POST['contactno']
+            email = request.POST['email']
+            password = request.POST['password']
+            confirm_password = request.POST['confirm_password']
+
+            if password != confirm_password:
+                messages.error(request, "Passwords do not match")
+                return render(request, 'adminapp/add_colleges.html')
+        
+            college = Colleges(name=name,address=address,contactno=contactno,email=email,password=password)
+            college.set_password(password)
+            college.save()
+            messages.success(request, "Your account has been created successfully")
+            return redirect('adminapp:manage_colleges')
+        return render(request,'adminapp/add_colleges.html')
+    else:
+        return redirect('adminapp:admin_login')
+    
+def edit_colleges(request, college_id):
+    if 'admin_id' in request.session:
+        college = get_object_or_404(Colleges, pk=college_id)
+        if request.method == "POST":
+            name = request.POST['name']
+            address = request.POST['address']
+            contactno = request.POST['contactno']
+            email = request.POST['email']
+
+
+            if name and address and  contactno and email:
+                college.name = name
+                college.address = address
+                college.contactno = contactno
+                college.email = email
+
+                college.save()
+                messages.success(request, "College has been updated successfully.")
+                return redirect('adminapp:manage_colleges')
+        return render(request, 'adminapp/edit_colleges.html', {'college': college})
+    else:
+        return redirect('adminapp:admin_login')
+    
+def delete_colleges(request,college_id):
+    if 'admin_id' in request.session:
+        colleges = get_object_or_404(Colleges,college_id=college_id)
+        colleges.delete()
+        messages.success(request, "college has been deleted successfully.")
+        return redirect('adminapp:manage_colleges')
+    else:
+        return redirect('adminapp:admin_login')
+    
+    
+def delete_feedback(request, feedback_id):
+    if request.method == 'POST':
+        feedback = get_object_or_404(Feedback, feedback_id=feedback_id)
+        college_id = feedback.event.college.college_id
+        feedback.delete()
+        return redirect('adminapp:edit_events_page',college_id=college_id)

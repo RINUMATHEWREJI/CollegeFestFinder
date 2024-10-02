@@ -57,7 +57,7 @@ class EventRegistration(models.Model):
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     student = models.ForeignKey('students.Student', on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='feedbacks')
     feedback_text = models.TextField()
     rating = models.IntegerField(default=0)  # Optional: Rating out of 5 or 10
     feedback_date = models.DateTimeField(auto_now_add=True)

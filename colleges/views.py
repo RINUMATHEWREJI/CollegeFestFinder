@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Colleges, Event
+from .models import Colleges, Event,Feedback
 from django.contrib import messages
 from datetime import datetime
 from django.utils.dateparse import parse_datetime
@@ -53,7 +53,12 @@ def college_homepage(request):
 
         events = Event.objects.filter(college=college)
 
-        return render(request,'colleges/college_homepage.html',{'events':events, 'college_name':college.name})
+        event_feedbacks = []
+        for event in events:
+            feedbacks = Feedback.objects.filter(event=event)
+            event_feedbacks.append({'event': event, 'feedbacks': feedbacks})
+
+        return render(request,'colleges/college_homepage.html',{ 'event_feedbacks': event_feedbacks,'college_name':college.name})
     else:
         return redirect('colleges:colleges_login')
     

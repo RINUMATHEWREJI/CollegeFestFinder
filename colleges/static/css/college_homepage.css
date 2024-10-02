@@ -72,3 +72,28 @@ header nav ul li {
 .eventbox .label{
     font-weight: bold;
 }
+
+.feedback_section {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.feedback_section h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.feedback_section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.feedback_section ul li {
+    margin-bottom: 15px;
+}
+
+.feedback_section ul li p {
+    margin: 5px 0;
+}

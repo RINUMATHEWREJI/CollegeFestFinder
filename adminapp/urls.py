@@ -14,4 +14,10 @@ urlpatterns = [
     path('edit_student/<int:student_id>',views.edit_student,name = 'edit_student'),
     path('delete_student/<int:student_id>',views.delete_student,name='delete_student'),
     path('add_student/',views.add_student,name = 'add_student'),
+    path('manage_colleges/',views.manage_colleges,name='manage_colleges'),
+    path('edit_colleges/<int:college_id>',views.edit_colleges,name = 'edit_colleges'),
+    path('delete_colleges/<int:college_id>',views.delete_colleges,name='delete_colleges'),
+    path('add_colleges/',views.add_colleges,name = 'add_colleges'),
+    path('delete_feedback/<int:feedback_id>/', views.delete_feedback, name='delete_feedback'),
+
 ]

@@ -9,25 +9,26 @@
 </head>
 <body>
 <header>
-    <div class="logo">Edit/Delete events</div>
+    <div class="logo">Edit/Delete Events</div>
     <nav>
-    <ul>
-        <li>
-            <a href="{% url 'adminapp:admin_homepage' %}">admin homepage</a>
-        </li>
-    </ul>
+        <ul>
+            <li><a href="{% url 'adminapp:admin_homepage' %}">Admin Homepage</a></li>
+        </ul>
     </nav>
 </header>
 <div class="event_container">
     {% for event in events %}
         <div class="eventbox">
+            <!-- Event details -->
             <img src="{{ event.event_logo.url }}" height="300px" width="300px">
             <p class="title">{{ event.event_name }}</p>
-            <p><span class="label">Date: </span>{{event.event_date}}</p>
-            <p><span class="label">End Date: </span>{{event.event_end_date}}</p>
-            <p><span class="label">Venue: </span>{{event.event_venue}}</p>
-            <p><span class="label">Description: </span>{{event.event_description}}</p>
-            <p><span class="label">Status: </span>{{event.event_status}}</p>
+            <p><span class="label">Date:</span> {{ event.event_date }}</p>
+            <p><span class="label">End Date:</span> {{ event.event_end_date }}</p>
+            <p><span class="label">Venue:</span> {{ event.event_venue }}</p>
+            <p><span class="label">Description:</span> {{ event.event_description }}</p>
+            <p><span class="label">Status:</span> {{ event.event_status }}</p>
+
+            <!-- Event edit and delete buttons -->
             <form method="post" action="{% url 'adminapp:edit_events' event.event_id %}" onsubmit="return confirmEdit();">
                 {% csrf_token %}
                 <button type="submit" class="edit_button">EDIT</button>
@@ -36,16 +37,42 @@
                 {% csrf_token %}
                 <button type="submit" class="delete_button">DELETE</button>
             </form>
+
+            <!-- Feedback Section -->
+            <div class="feedback-section">
+                <h3>Feedback</h3>
+                {% if event.feedbacks.exists %}
+                    {% for feedback in event.feedbacks.all %}
+                        <div class="feedback-item">
+                            <p><strong>{{ feedback.student.name }}:</strong> {{ feedback.feedback_text }}</p>
+                            <p><strong>Rating:</strong> {{ feedback.rating }}/5</p>
+
+                            <!-- Delete feedback button -->
+                            <form method="post" action="{% url 'adminapp:delete_feedback' feedback.feedback_id %}" onsubmit="return confirmDeleteFeedback();">
+                                {% csrf_token %}
+                                <button type="submit" class="delete_feedback_button">Delete Feedback</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No feedback available for this event.</p>
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
-
 </div>
+
 <script>
-    function confirmEdit(){
-        return confirm("are you sure want to edit this event? ");
+    function confirmEdit() {
+        return confirm("Are you sure you want to edit this event?");
     }
-    function confirmDeletion(){
-        return confirm("are you sure want to delete this event?");
+
+    function confirmDeletion() {
+        return confirm("Are you sure you want to delete this event?");
+    }
+
+    function confirmDeleteFeedback() {
+        return confirm("Are you sure you want to delete this feedback?");
     }
 </script>
 

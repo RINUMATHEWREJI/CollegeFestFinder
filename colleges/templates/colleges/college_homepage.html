@@ -24,15 +24,33 @@
     <h1>Events</h1>
 </div>
 <div class="event_container">
-    {% for event in events %}    
+    {% for event_feedback in event_feedbacks %}
         <div class="eventbox">
-            <img src="{{ event.event_logo.url }}" height="300px" width="300px">
-            <p class="title">{{event.event_name}}</p>
-            <p><span class="label">Description:</span> {{event.event_description}}</p>
-            <p><span class="label">End Date:</span> {{event.event_end_date}}</p>
-            <p><span class="label">Status:</span> {{event.event_status}}</p>
+            <img src="{{ event_feedback.event.event_logo.url }}" height="300px" width="300px">
+            <p class="title">{{ event_feedback.event.event_name }}</p>
+            <p><span class="label">Description:</span> {{ event_feedback.event.event_description }}</p>
+            <p><span class="label">End Date:</span> {{ event_feedback.event.event_end_date }}</p>
+            <p><span class="label">Status:</span> {{ event_feedback.event.event_status }}</p>
+            
+            <div class="feedback_section">
+                <h3>Feedback:</h3>
+                {% if event_feedback.feedbacks %}
+                    <ul>
+                        {% for feedback in event_feedback.feedbacks %}
+                            <li>
+                                <p><strong>{{ feedback.student.name }}:</strong> {{ feedback.feedback_text }}</p>
+                                <p>Rating: {{ feedback.rating }}/5</p>
+                                <p>Date: {{ feedback.feedback_date }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No feedback available for this event.</p>
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
 </div>
+
 </body>
 </html>

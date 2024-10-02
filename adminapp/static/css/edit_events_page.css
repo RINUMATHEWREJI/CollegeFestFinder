@@ -107,3 +107,37 @@ header nav ul li {
 .delete_button:hover {
     background-color: darkred; 
 }
+.feedback-section {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.feedback-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.feedback-item p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.delete_feedback_button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.delete_feedback_button:hover {
+    background-color: #ff4500;
+}

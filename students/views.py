@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate,login
 from colleges.models import Colleges,Event,EventRegistration
 from colleges.models import Feedback
 from django.urls import reverse
+from django.utils import timezone
+from datetime import timedelta
 # Create your views here.
 
 def homepage(request):
@@ -71,12 +73,28 @@ def student_homepage(request):
 
         colleges = Colleges.objects.all()
 
+
         query = request.GET.get('search')
         if query:
             colleges = colleges.filter(name__icontains = query)
 
+
+        events = Event.objects.all()
+        selected_filter = request.GET.get('filter', 'all')  # Default filter is 'all'
+
+        # Get the current date
+        today = timezone.now().date()
+
+        if selected_filter == 'this_month':
+            # Filter events that are happening this month
+            events = events.filter(event_date__month=today.month, event_date__year=today.year)
+        elif selected_filter == 'upcoming':
+            first_day_next_month = (today.replace(day=1) + timedelta(days=32)).replace(day=1)
+            # Filter events happening after this month (i.e., after the end of the current month)
+            events = events.filter(event_date__gte=first_day_next_month)
+
         registered_events = Event.objects.filter(eventregistration__student_id = student_id)
-        return render(request, 'students/student_homepage.html', {'student_name': student_name , 'colleges':colleges , 'registered_events':registered_events})
+        return render(request, 'students/student_homepage.html', {'student_name': student_name ,'events':events , 'colleges':colleges , 'registered_events':registered_events , 'selected_filter': selected_filter})
     else:
         return redirect('students:student_login')
     
@@ -133,7 +151,7 @@ def register_for_event(request, event_id):
                 messages.error(request, 'Registration for this event is closed.')
 
         # Redirect back to the list of events for the college
-        return redirect('students:view_college_events', college_id=event.college.college_id)
+        return redirect('students:student_homepage')
 
 def student_logout(request):
     request.session.flush()

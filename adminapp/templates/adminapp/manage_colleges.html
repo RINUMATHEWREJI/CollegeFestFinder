@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Colleges</title>
+    <link rel="stylesheet" href="{% static 'css/manage_colleges.css' %}">
+</head>
+<body>
+    <div class="container">
+
+        <div class="add-student-btn">
+            <a href="{% url 'adminapp:add_colleges' %}" class="btn">Add Colleges</a>
+        </div>
+
+            <table class="students-table">
+            <thead>
+                <tr>
+                    <th>College ID</th>
+                    <th>College Name</th>
+                    <th>Address</th>
+                    <th>Contact No</th>
+                    <th>Email</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for college in colleges %}
+                <tr>
+                    <td>{{ college.college_id }}</td>
+                    <td>{{ college.name }}</td>
+                    <td>{{ college.address }}</td>
+                    <td>{{ college.contactno }}</td>
+                    <td>{{ college.email }}</td>
+                    
+                    
+                    <td><a href="{% url 'adminapp:edit_colleges' college.college_id %}" class="btn btn-edit">Edit</a></td>
+                    <td><a href="{% url 'adminapp:delete_colleges' college.college_id %}" class="btn btn-delete">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
