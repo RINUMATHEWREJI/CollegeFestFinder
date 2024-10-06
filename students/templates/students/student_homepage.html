@@ -30,11 +30,22 @@
         <div class="cta-buttons">
             <a href="#colleges" class="btn">Explore Events</a>
         </div>
-        <div class="search-bar">
-            <form method="GET" action="{% url 'students:student_homepage' %}">
-                <input type="text" name="search" placeholder="Search colleges...">
-                <button type="submit">Search</button>
-            </form>
+        <div class="search-bar-container">
+            <!-- College Search Bar -->
+            <div class="search-bar">
+                <form method="GET" action="{% url 'students:student_homepage' %}">
+                    <input type="text" name="search_college" placeholder="Search colleges..." value="{{ request.GET.search_college }}">
+                    <button type="submit">Search Colleges</button>
+                </form>
+            </div>
+        
+            <!-- Event Search Bar -->
+            <div class="search-bar">
+                <form method="GET" action="{% url 'students:student_homepage' %}">
+                    <input type="text" name="search_event" placeholder="Search events..." value="{{ request.GET.search_event }}">
+                    <button type="submit">Search Events</button>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -58,8 +69,14 @@
                 <img src="{{ event.event_logo.url }}" height="300px" width="300px">
                 <p class="title">{{ event.event_name }}</p>
                 <p><span class="label">Description:</span> {{ event.event_description }}</p>
+                <p><span class="label">Start Date:</span> {{ event.event_start_date }}</p>
                 <p><span class="label">End Date:</span> {{ event.event_end_date }}</p>
                 <p><span class="label">Status:</span> {{ event.event_status }}</p>
+                {% if event.event_pdf %}
+                <a href="{{ event.event_pdf.url }}" class="download-pdf" download>Download Event Details (PDF)</a>
+                {% else %}
+                <p>No PDF available for this event.</p>
+                {% endif %}
                 {% if event.event_status == 'open' %}
                     <form method="post" action="{% url 'students:register_for_event' event.event_id %}">
                         {% csrf_token %}

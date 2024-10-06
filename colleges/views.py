@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Colleges, Event,Feedback
 from django.contrib import messages
+from datetime import date
 from datetime import datetime
 from django.utils.dateparse import parse_datetime
 from django.contrib.auth.decorators import login_required
@@ -75,9 +76,13 @@ def add_event(request):
         event_description = request.POST.get('event_description')
         event_logo = request.FILES.get('event_logo')
         event_status = request.POST.get('event_status')
+        event_pdf = request.FILES.get('event_pdf')
 
-        event_date = parse_datetime(event_date_str)
-        event_end_date = parse_datetime(event_end_date_str)
+        event_start_date = datetime.strptime(event_date_str, '%Y-%m-%d').date()
+        event_end_date = datetime.strptime(event_end_date_str, '%Y-%m-%d').date()
+
+        if event_end_date < datetime.now().date():
+            event_status = 'closed'
 
         
         college = Colleges.objects.get(pk=request.session['college_id'])
@@ -85,7 +90,7 @@ def add_event(request):
         event = Event(
             college=college,
             event_name=event_name,
-            event_date=event_date,
+            event_start_date=event_start_date,
             event_end_date=event_end_date,
             event_venue=event_venue,
             event_description=event_description,
@@ -94,6 +99,9 @@ def add_event(request):
 
         if event_logo:
             event.event_logo = event_logo
+
+        if event_pdf:
+            event.event_pdf = event_pdf
 
         event.save()
         return redirect('colleges:college_homepage')
@@ -148,11 +156,16 @@ def update_event(request, event_id):
 
             if event_name and event_date and event_end_date and event_venue and event_description and event_status:
                 event.event_name = event_name
-                event.event_date = event_date  # Should be in 'YYYY-MM-DD' format
+                event.event_start_date = event_date  # Should be in 'YYYY-MM-DD' format
                 event.event_end_date = event_end_date  # Should be in 'YYYY-MM-DD' format
                 event.event_venue = event_venue
                 event.event_description = event_description
-                event.event_status = event_status
+                today = date.today()
+                if today > event.event_end_date:
+                    event.event_status = 'closed'
+                    messages.warning(request, "The event's registration has been automatically closed as the end date has passed.")
+                else:
+                    event.event_status = event_status
 
                 if event_logo:
                     event.event_logo = event_logo
@@ -170,3 +183,11 @@ def update_event(request, event_id):
 def colleges_logout(request):
     request.session.flush()
     return redirect('students:homepage')
+
+
+def check_and_close_expired_events():
+    today = datetime.now().date()
+    # Find events that have an end date in the past and are still 'open'
+    expired_events = Event.objects.filter(event_end_date__lt=today, event_status='open')
+    # Update the status of these events to 'closed'
+    expired_events.update(event_status='closed')

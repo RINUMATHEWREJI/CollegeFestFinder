@@ -17,7 +17,7 @@
             <input type="text" id="event_name" name="event_name" required>
         </div>
         <div>
-            <label for="event_date">Event Date:</label>
+            <label for="event_Start_date">Event start Date:</label>
             <input type="date" id="event_date" name="event_date" required>
         </div>
         <div>
@@ -43,6 +43,11 @@
                 <option value="closed">Closed</option>
             </select>
         </div>
+        <div>
+            <label for="event_pdf">Event PDF:</label>
+            <input type="file" id="event_pdf" name="event_pdf" accept="application/pdf">
+        </div>
+        
         <button type="submit">Add Event</button>
         <a class="back-button" href="{% url 'colleges:college_homepage' %}">Home</a>
     </form>

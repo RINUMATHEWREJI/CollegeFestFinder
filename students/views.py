@@ -8,6 +8,7 @@ from colleges.models import Feedback
 from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
+from colleges.views import  check_and_close_expired_events
 # Create your views here.
 
 def homepage(request):
@@ -71,15 +72,22 @@ def student_homepage(request):
         student_name = request.session['student_name']
         student_id = request.session['student_id']
 
+        check_and_close_expired_events()
+
         colleges = Colleges.objects.all()
 
 
-        query = request.GET.get('search')
+        query = request.GET.get('search_college')
         if query:
             colleges = colleges.filter(name__icontains = query)
 
 
         events = Event.objects.all()
+
+        event_query = request.GET.get('search_event')
+        if event_query:
+            events = events.filter(event_name__icontains=event_query)
+
         selected_filter = request.GET.get('filter', 'all')  # Default filter is 'all'
 
         # Get the current date
@@ -87,11 +95,11 @@ def student_homepage(request):
 
         if selected_filter == 'this_month':
             # Filter events that are happening this month
-            events = events.filter(event_date__month=today.month, event_date__year=today.year)
+            events = events.filter(event_start_date__month=today.month, event_start_date__year=today.year)
         elif selected_filter == 'upcoming':
             first_day_next_month = (today.replace(day=1) + timedelta(days=32)).replace(day=1)
             # Filter events happening after this month (i.e., after the end of the current month)
-            events = events.filter(event_date__gte=first_day_next_month)
+            events = events.filter(event_start_date__gte=first_day_next_month)
 
         registered_events = Event.objects.filter(eventregistration__student_id = student_id)
         return render(request, 'students/student_homepage.html', {'student_name': student_name ,'events':events , 'colleges':colleges , 'registered_events':registered_events , 'selected_filter': selected_filter})

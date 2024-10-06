@@ -27,7 +27,7 @@ class Event(models.Model):
     college = models.ForeignKey('colleges.Colleges', on_delete=models.CASCADE)
     event_id = models.AutoField(primary_key=True)
     event_name = models.CharField(max_length=50)
-    event_date = models.DateTimeField()
+    event_start_date = models.DateTimeField()
     event_end_date = models.DateTimeField(null=True, blank=True)  
     event_venue = models.CharField(max_length=200)
     event_description = models.CharField(max_length=200)
@@ -37,7 +37,8 @@ class Event(models.Model):
         ('closed', 'Closed'),
     ]
     event_status = models.CharField(max_length=30, choices=event_statuses)
-    
+    event_pdf = models.FileField(upload_to='event_pdfs/', null=True, blank=True)
+
     students = models.ManyToManyField('students.Student', through='EventRegistration')
 
     def __str__(self):

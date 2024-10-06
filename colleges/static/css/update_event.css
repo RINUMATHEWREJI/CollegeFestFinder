@@ -41,11 +41,17 @@ form label {
 form input[type="text"],
 form input[type="date"],
 form textarea,
-form select {
+form select,
+form input[type="file"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+form input[type="file"] {
+    background-color: #f9f9f9;
+    cursor: pointer;
 }
 
 form textarea {
@@ -83,4 +89,13 @@ form .back-button {
 
 form .back-button:hover {
     background-color: #0056b3;
+}
+
+form a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+form a:hover {
+    text-decoration: underline;
 }

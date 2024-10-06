@@ -282,3 +282,47 @@ header nav ul li {
 .register-button:hover {
     background-color: #0056b3;
 }
+.download-pdf {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.download-pdf:hover {
+    background-color: #0056b3;
+}
+.search-bar-container {
+    display: flex;
+    margin: 20px 0;
+}
+
+.search-bar input {
+    padding: 10px;
+    margin-left: 280px;
+    font-size: 16px;
+    width: 200px;
+    margin-right: 10px;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}

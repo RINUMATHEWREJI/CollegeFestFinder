@@ -20,7 +20,7 @@
             </div>
             <div>
                 <label for="event_end_date">Event Date:</label>
-                <input type="date" id="event_date" name="event_date" value="{{ event.event_date }}" required>
+                <input type="date" id="event_date" name="event_date" value="{{ event.event_start_date }}" required>
             </div>
             <div>
                 <label for="event_end_date">Event End Date:</label>
@@ -40,6 +40,13 @@
                 <input type="file" id="event_logo" name="event_logo">
                 {% if event.event_logo %}
                     <img src="{{ event.event_logo.url }}" alt="Current Logo" height="100px" width="100px">
+                {% endif %}
+            </div>
+            <div>
+                <label for="event_pdf">Event PDF:</label>
+                <input type="file" id="event_pdf" name="event_pdf" accept="application/pdf">
+                {% if event.event_pdf %}
+                    <a href="{{ event.event_pdf.url }}" target="_blank">Download current PDF</a>
                 {% endif %}
             </div>
             <div>

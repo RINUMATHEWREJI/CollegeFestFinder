@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib import messages
 from django.apps import apps
 from datetime import datetime
+import datetime
 
 Admin = apps.get_model('adminapp', 'Admin')
 Colleges = apps.get_model('colleges', 'Colleges')
@@ -66,23 +67,41 @@ def edit_events_page(request,college_id):
     else:
         return redirect('adminapp:admin_login')
 
-def edit_events(request,event_id):
+def edit_events(request, event_id):
     if 'admin_id' in request.session:
-        event = get_object_or_404(Event,event_id=event_id)
+        event = get_object_or_404(Event, event_id=event_id)
+        
         if request.method == 'POST':
             event_name = request.POST.get('event_name')
-            event_date = request.POST.get('event_date')
+            event_start_date = request.POST.get('event_start_date')
             event_end_date = request.POST.get('event_end_date')
             event_venue = request.POST.get('event_venue')
             event_description = request.POST.get('event_description')
             event_logo = request.FILES.get('event_logo')
             event_status = request.POST.get('event_status')
 
-            if event_name and event_date and event_end_date and event_venue and event_description and event_status:
-                event.event_name = event_name
-                event.event_date = event_date  
-                event.event_end_date = event_end_date  
+            if event_name and event_start_date and event_end_date and event_venue and event_description and event_status:
+                try:
+                    # Convert strings to date objects
+                    event.event_start_date = datetime.datetime.strptime(event_start_date, '%Y-%m-%d').date()
+                    event.event_end_date = datetime.datetime.strptime(event_end_date, '%Y-%m-%d').date()
+                except ValueError:
+                    messages.error(request, "Invalid date format. Please provide a valid date.")
+                    return redirect('adminapp:edit_events_page', college_id=event.college.college_id)
+
+                # Check for event collisions with other events (Example)
+                 # Check for event collisions with other events (Example)
+                overlapping_event = Event.objects.filter(
+                    event_start_date__lte=event.event_end_date,  # Check if the start date overlaps
+                    event_end_date__gte=event.event_start_date,  # Check if the end date overlaps
+                    college=event.college
+                ).exclude(event_id=event.event_id).exists()
                 
+                if overlapping_event:
+                    messages.error(request, "Another event is already scheduled on this date.")
+                    return redirect('adminapp:edit_events_page', college_id=event.college.college_id)
+
+                event.event_name = event_name
                 event.event_venue = event_venue
                 event.event_description = event_description
                 event.event_status = event_status
@@ -92,11 +111,12 @@ def edit_events(request,event_id):
 
                 event.save()
                 messages.success(request, "Event has been updated successfully.")
-                return redirect('adminapp:edit_events_page', college_id = event.college.college_id) 
-        return render(request,'adminapp/edit_events.html',{'event':event , 'college_id': event.college.college_id})
+                return redirect('adminapp:edit_events_page', college_id=event.college.college_id)
+        
+        return render(request, 'adminapp/edit_events.html', {'event': event, 'college_id': event.college.college_id})
+    
     else:
-        return redirect('adminapp:admin_login')
-
+        return redirect('adminapp:admin_login')     
 def delete_events(request,event_id):
     if 'admin_id' in request.session:
         event = get_object_or_404(Event, event_id=event_id)

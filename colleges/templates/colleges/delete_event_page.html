@@ -19,6 +19,7 @@
                     <img src="{{ event.event_logo.url }}" height="300px" width="300px">
                     <p class="title">{{event.event_name}}</p>
                     <p><span class="label">Description:</span> {{event.event_description}}</p>
+                    <p><span class="label">Start Date:</span> {{ event.event_start_date }}</p>
                     <p><span class="label">End Date:</span> {{event.event_end_date}}</p>
                     <p><span class="label">Status:</span> {{event.event_status}}</p>
                     <form action="{% url 'colleges:delete_event' event.event_id %}" method="post" onsubmit="return confirmDeletion();"> 

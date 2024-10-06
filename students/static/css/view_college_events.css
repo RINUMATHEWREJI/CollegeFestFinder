@@ -83,3 +83,20 @@ header nav ul li {
 .register-button:hover {
     background-color: #0056b3;
 }
+.download-pdf {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.download-pdf:hover {
+    background-color: #0056b3;
+}
