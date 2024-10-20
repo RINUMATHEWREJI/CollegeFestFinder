@@ -99,3 +99,27 @@ form a {
 form a:hover {
     text-decoration: underline;
 }
+.messages {
+    margin-bottom: 20px;
+}
+
+.messages div {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.messages .success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.messages .warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+}
+
+.messages .error {
+    background-color: #f2dede;
+    color: #a94442;
+}

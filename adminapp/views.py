@@ -70,7 +70,7 @@ def edit_events_page(request,college_id):
 def edit_events(request, event_id):
     if 'admin_id' in request.session:
         event = get_object_or_404(Event, event_id=event_id)
-        
+
         if request.method == 'POST':
             event_name = request.POST.get('event_name')
             event_start_date = request.POST.get('event_start_date')
@@ -87,19 +87,19 @@ def edit_events(request, event_id):
                     event.event_end_date = datetime.datetime.strptime(event_end_date, '%Y-%m-%d').date()
                 except ValueError:
                     messages.error(request, "Invalid date format. Please provide a valid date.")
-                    return redirect('adminapp:edit_events_page', college_id=event.college.college_id)
+                    return redirect('adminapp:edit_events', college_id=event.college.college_id)
 
-                # Check for event collisions with other events (Example)
-                 # Check for event collisions with other events (Example)
                 overlapping_event = Event.objects.filter(
-                    event_start_date__lte=event.event_end_date,  # Check if the start date overlaps
-                    event_end_date__gte=event.event_start_date,  # Check if the end date overlaps
-                    college=event.college
-                ).exclude(event_id=event.event_id).exists()
-                
+                    college=event.college,
+                    event_start_date__lt=event.event_end_date,  # Current event ends after the start of another event
+                    event_end_date__gt=event.event_start_date   # Current event starts before the end of another event
+                ).exclude(event_id=event.event_id).first()  # Exclude the current event
+
+                college = event.college
+
                 if overlapping_event:
-                    messages.error(request, "Another event is already scheduled on this date.")
-                    return redirect('adminapp:edit_events_page', college_id=event.college.college_id)
+                    messages.error(request, f"Another event '{overlapping_event.event_name}' from '{college.name}' is already scheduled during this time.")
+                    return redirect('adminapp:edit_events', event_id=event.event_id)
 
                 event.event_name = event_name
                 event.event_venue = event_venue
@@ -112,11 +112,12 @@ def edit_events(request, event_id):
                 event.save()
                 messages.success(request, "Event has been updated successfully.")
                 return redirect('adminapp:edit_events_page', college_id=event.college.college_id)
-        
+
         return render(request, 'adminapp/edit_events.html', {'event': event, 'college_id': event.college.college_id})
-    
+
     else:
-        return redirect('adminapp:admin_login')     
+        return redirect('adminapp:admin_login')
+     
 def delete_events(request,event_id):
     if 'admin_id' in request.session:
         event = get_object_or_404(Event, event_id=event_id)

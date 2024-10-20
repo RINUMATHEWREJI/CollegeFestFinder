@@ -7,6 +7,7 @@ from django.utils.dateparse import parse_datetime
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
+
 def colleges_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -64,7 +65,6 @@ def college_homepage(request):
         return redirect('colleges:colleges_login')
     
 def add_event(request):
-   
     if 'college_id' not in request.session:
         return redirect('colleges:colleges_login')
 
@@ -78,15 +78,28 @@ def add_event(request):
         event_status = request.POST.get('event_status')
         event_pdf = request.FILES.get('event_pdf')
 
+        # Parse the event start and end dates
         event_start_date = datetime.strptime(event_date_str, '%Y-%m-%d').date()
         event_end_date = datetime.strptime(event_end_date_str, '%Y-%m-%d').date()
 
+        # Set event status if the end date is in the past
         if event_end_date < datetime.now().date():
             event_status = 'closed'
 
-        
         college = Colleges.objects.get(pk=request.session['college_id'])
 
+        # Check for overlapping events only with other colleges
+        overlapping_event = Event.objects.filter(
+            event_start_date__lte=event_end_date,
+            event_end_date__gte=event_start_date
+        ).exclude(college=college).first()  # Exclude events from the same college
+
+        if overlapping_event:
+            # Correct the college reference in the error message
+            messages.error(request, f"Another event '{overlapping_event.event_name}' from '{overlapping_event.college.name}' is already scheduled during this time.")
+            return render(request, 'colleges/add_event.html')  # Re-render the form with error message
+
+        # If no overlap, create and save the event
         event = Event(
             college=college,
             event_name=event_name,
@@ -97,17 +110,17 @@ def add_event(request):
             event_status=event_status
         )
 
+        # Assign uploaded files if provided
         if event_logo:
             event.event_logo = event_logo
 
         if event_pdf:
             event.event_pdf = event_pdf
 
-        event.save()
-        return redirect('colleges:college_homepage')
+        event.save()  # Save the event to the database
+        return redirect('colleges:college_homepage')  # Redirect to the college homepage after saving
 
     return render(request, 'colleges/add_event.html')
-
 def delete_event_page(request, event_id=None):
     if 'college_id' in request.session:
         college_id = request.session['college_id']
@@ -154,13 +167,15 @@ def update_event(request, event_id):
             event_logo = request.FILES.get('event_logo')
             event_status = request.POST.get('event_status')
 
+            # Check if all required fields are filled
             if event_name and event_date and event_end_date and event_venue and event_description and event_status:
                 event.event_name = event_name
-                event.event_start_date = event_date  # Should be in 'YYYY-MM-DD' format
-                event.event_end_date = event_end_date  # Should be in 'YYYY-MM-DD' format
+                event.event_start_date = datetime.strptime(event_date, '%Y-%m-%d').date()  # Convert string to date
+                event.event_end_date = datetime.strptime(event_end_date, '%Y-%m-%d').date()  # Convert string to date
                 event.event_venue = event_venue
                 event.event_description = event_description
                 today = date.today()
+
                 if today > event.event_end_date:
                     event.event_status = 'closed'
                     messages.warning(request, "The event's registration has been automatically closed as the end date has passed.")
@@ -170,15 +185,23 @@ def update_event(request, event_id):
                 if event_logo:
                     event.event_logo = event_logo
 
-                event.save()
-                messages.success(request, "Event has been updated successfully.")
-                return redirect('colleges:update_event_page')  
+                # Check for overlapping events with different colleges
+                overlapping_event = Event.objects.filter(
+                    event_start_date__lte=event.event_end_date,
+                    event_end_date__gte=event.event_start_date
+                ).exclude(college=college).first()  # Exclude the same college's event
 
-        return render(request, 'colleges/update_event.html', {'event': event})
+                if overlapping_event:
+                    messages.error(request, f"Another event '{overlapping_event.event_name}' from '{overlapping_event.college.name}' is already scheduled during this time.")
+                    return render(request, 'colleges/update_event.html', {'event': event})
+
+                event.save()  # Save the updated event
+                messages.success(request, "Event has been updated successfully.")
+                return redirect('colleges:update_event_page')  # Redirect to the update event page
+
+        return render(request, 'colleges/update_event.html', {'event': event})  # Render the update form
 
     return redirect('colleges:colleges_login')
-
-
 
 def colleges_logout(request):
     request.session.flush()

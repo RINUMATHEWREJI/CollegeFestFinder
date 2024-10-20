@@ -11,6 +11,15 @@
     </header>
     <div class="form_container">
         <h1>Update Event: {{ event.event_name }}</h1>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="event_id" value="{{ event.id }}">

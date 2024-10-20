@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Dates</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
+</head>
+<body>
+    <h1>Available Dates</h1>
+    <div id="calendar"></div>
+
+    <a href="{% url 'colleges:add_event' %}">Back to Add Event</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Assuming available_dates is passed as a JSON-encoded string from the Django view
+            const availableDates = {{ available_dates|safe }};  // Ensure this is a valid JSON array
+
+            const calendarEl = document.getElementById('calendar');
+
+            // Initialize the calendar
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: availableDates.map(date => ({
+                    title: 'Available',
+                    start: date,
+                    allDay: true
+                })),
+                dateClick: function(info) {
+                    alert('Date clicked: ' + info.dateStr);
+                    // You can redirect to add an event for that date
+                    // window.location.href = `{% url 'colleges:add_event' %}?date=${info.dateStr}`;
+                }
+            });
+
+            // Render the calendar
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
